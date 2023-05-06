@@ -1,0 +1,66 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.header{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding:0 4rem;
+  border:1px solid saddlebrown;
+}
+
+.header-logo{
+  cursor: pointer;
+  height: 100px;
+  width: 100px;
+}
+
+.header-title{
+  cursor: pointer;
+  color:#FA3B32;
+  font-style:italic;
+  margin-right: auto;
+}
+.header-links{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: flex;
+  font-size: 24px;
+  gap:40px;
+  list-style-type: none;
+}
+
+.header-links > li:hover, .header-links > li:focus{
+  cursor: pointer;
+  color:red;
+}
+
+.search-sort-filter-section{
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+}
+
+.restro-container{
+  border:1px solid saddlebrown;
+  padding:1em 2.5em ;
+}
+.restro-card{
+  background-color: azure;
+  width: 15em;
+  height: 20em;
+  padding:10px;
+  border-radius: 0.5em;
+}
+.restro-card:hover{
+  outline:1px solid saddlebrown; 
+  transform: scale(1.02);
+  transition: transform 0.2s ease-in-out;
+
+}
+.restro-logo{
+  width:100%;
+  border-radius: 0.5em;
+}

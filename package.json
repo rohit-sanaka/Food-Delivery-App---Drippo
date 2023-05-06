@@ -1,0 +1,22 @@
+{
+  "name": "Drizzo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/rohit-sanaka/Food-Delivery-App---Drippo.git",
+  "author": "Rohit Sanaka <srohitkumar147@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "private": false,
+  "devDependencies": {
+    "parcel": "^2.8.3",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
