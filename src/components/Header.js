@@ -4,7 +4,7 @@ export default Header = () => {
   return (
     <header className="header">
       <img src={favicon} className="header-logo" alt="logo" />
-      <h1 className="header-title">DRIZZO</h1>
+      <h1 className="header-title">ZORRO</h1>
       <ul className="header-links">
         <li>Home</li>
         <li>Offers</li>

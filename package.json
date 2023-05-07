@@ -1,5 +1,5 @@
 {
-  "name": "Drizzo",
+  "name": "zorro",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/rohit-sanaka/Food-Delivery-App---Drippo.git",
@@ -19,6 +19,10 @@
     "process": "^0.11.10"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.12.3",
+    "material-ui": "^0.20.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

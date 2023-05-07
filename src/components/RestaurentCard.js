@@ -1,20 +1,32 @@
-export default RestaurentCard = ({ resData }) => (
-  <>
-    {resData.map((restaurant) => (
-      <div key={restaurant.data.data.id} className="restro-card">
+import { RESTRO_CDN } from "../utils/constants";
+
+export default function RestaurentCard({ resData }) {
+  return (RestaurantCradArray = resData.map((restaurant) => {
+    const {
+      cloudinaryImageId,
+      name,
+      cuisines,
+      avgRating,
+      costForTwo,
+      deliveryTime,
+      id,
+    } = restaurant.data;
+
+    return (
+      <div key={id} className="restro-card">
         <img
           className="restro-logo"
-          src={`https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/${restaurant.data.data.cloudinaryImageId}`}
+          src={RESTRO_CDN + cloudinaryImageId}
           alt="Restaurant-img"
         />
-        <h3>{restaurant.data.data.name}</h3>
-        <p>{restaurant.data.data.cuisines.join(", ")}</p>
+        <h3>{name}</h3>
+        <p>{cuisines?.join(", ")}</p>
         <div className="restro-card-details">
-          <span>{"⭐" + restaurant.data.data.avgRating}</span>.
-          <span>₹{restaurant.data.data.costForTwo / 100}FOR TWO</span>.
-          <span>{restaurant.data.data.deliveryTime}Mins</span>
+          <span>{"⭐" + avgRating}</span>.
+          <span>₹{costForTwo / 100} FOR TWO</span>.
+          <span>{deliveryTime}Mins</span>
         </div>
       </div>
-    ))}
-  </>
-);
+    );
+  }));
+}
