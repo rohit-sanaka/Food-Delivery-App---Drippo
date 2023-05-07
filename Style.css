@@ -9,7 +9,6 @@
   justify-content: start;
   align-items: center;
   padding:0 4rem;
-  border:1px solid saddlebrown;
 }
 
 .header-logo{
@@ -34,33 +33,45 @@
 
 .header-links > li:hover, .header-links > li:focus{
   cursor: pointer;
-  color:red;
+  color:#FA3B32;
 }
 
 .search-sort-filter-section{
   display: flex;
   justify-content: space-around;
   padding: 1rem;
+  border:1px solid #FA3B32;
 }
 
 .restro-container{
-  border:1px solid saddlebrown;
-  padding:1em 2.5em ;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap:1em;
+  padding:25px 75px;
+}
+.restro-card > *{
+  padding-top:10px;
 }
 .restro-card{
-  background-color: azure;
-  width: 15em;
-  height: 20em;
+  background-color:floralwhite;
   padding:10px;
-  border-radius: 0.5em;
+  border-radius: 10px;
+  box-shadow: 0 0 1px;
 }
-.restro-card:hover{
-  outline:1px solid saddlebrown; 
-  transform: scale(1.02);
-  transition: transform 0.2s ease-in-out;
 
+.restro-card:hover{ 
+  cursor: pointer;
+  box-shadow: 0 0 5px #FA3B32;
 }
+
 .restro-logo{
+  padding: 0;
   width:100%;
-  border-radius: 0.5em;
+  height: 175px;
+  border-radius:10px 10px 10px 10px;
+}
+.restro-card-details{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

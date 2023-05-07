@@ -11,6 +11,9 @@
     "test": "jest"
   },
   "private": false,
+  "browserslist": [
+    "last 2 versions"
+  ],
   "devDependencies": {
     "parcel": "^2.8.3",
     "process": "^0.11.10"
