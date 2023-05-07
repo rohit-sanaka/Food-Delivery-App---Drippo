@@ -1,50 +1,47 @@
 import RestaurentCard from "./RestaurentCard";
-// import { ShimmerSkeletion } from "../utils/constants";
+import { RESTRO_CDN_START, RESTRO_CDN2_END } from "../utils/constants";
 import { useEffect, useRef, useState } from "react";
-import Skeleton from "@mui/material/Skeleton";
-let rawData = [];
-
-let Skeletion1 = [];
-for (let i = 0; i < 15; i++) {
-  Skeletion1.push(
-    <div
-      key={i}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        padding: 0,
-        marginTop: 0,
-      }}
-    >
-      <Skeleton
-        animation="wave"
-        height={300}
-        width={250}
-        style={{ padding: 0, marginTop: 0 }}
-      />
-      <Skeleton animation="wave" height={20} style={{ marginBottom: 6 }} />
-      <Skeleton animation="wave" height={20} width="80%" />
-    </div>
-  );
-}
+import Shimmer from "./Shimmer";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default Main = () => {
+  const [rawData, setRawData] = useState([]);
   const [resData, setResData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [offset, setOffset] = useState(0);
   const [seachText, setSeachText] = useState("");
 
-  console.log("rendering Skeleton...");
+  console.log(offset);
   useEffect(() => {
     getRestaurants();
+    console.log("useEffect...");
   }, []);
 
-  async function getRestaurants() {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=16.3030246&lng=80.4322826&page_type=DESKTOP_WEB_LISTING"
-    );
-    const jsonData = await data.json();
-    rawData = jsonData?.data?.cards[2]?.data?.data?.cards;
-    setResData(jsonData?.data?.cards[2]?.data?.data?.cards);
-  }
+  const getRestaurants = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const url = RESTRO_CDN_START + offset + RESTRO_CDN2_END;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const cards = data?.data?.cards;
+      const filterDataWithoutId = cards.filter((card) => {
+        return card.data.data.id && card.data.data.cloudinaryImageId;
+      });
+      setResData((prevItems) => [...prevItems, ...filterDataWithoutId]);
+
+      setRawData((prevItems) => [...prevItems, ...filterDataWithoutId]);
+
+      setOffset((prevOffset) => prevOffset + 16);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main className="main">
@@ -62,7 +59,7 @@ export default Main = () => {
           <button
             onClick={() => {
               data1 = rawData.filter((restaurant) => {
-                const name = restaurant.data.name.toLowerCase();
+                const name = restaurant.data.data.name.toLowerCase();
                 console.log(name);
                 return name.includes(seachText.toLowerCase());
               });
@@ -76,7 +73,7 @@ export default Main = () => {
         <button
           onClick={() => {
             const data1 = [...resData];
-            data1.sort((a, b) => b.data.avgRating - a.data.avgRating);
+            data1.sort((a, b) => b.data.data.avgRating - a.data.data.avgRating);
             setResData(data1);
           }}
         >
@@ -86,7 +83,7 @@ export default Main = () => {
         <button
           onClick={() => {
             const TopRatedRestaurants = resData.filter(
-              (res) => res?.data?.avgRating > 4
+              (res) => res?.data.data?.avgRating > 4
             );
             setResData(TopRatedRestaurants);
           }}
@@ -94,10 +91,21 @@ export default Main = () => {
           <h2>Top Rated</h2>
         </button>
       </div>
-
-      <div className="restro-container">
-        {resData.length > 0 ? <RestaurentCard resData={resData} /> : Skeletion1}
-      </div>
+      <InfiniteScroll
+        dataLength={resData.length / 5}
+        next={getRestaurants}
+        hasMore={offset < 60 ? true : false} // Replace with a condition based on your data source
+        loader={<Shimmer />}
+        endMessage={<p>No more data to load.</p>}
+      >
+        <div className="restro-container">
+          {resData.length > 0 ? (
+            <RestaurentCard resData={resData} />
+          ) : (
+            <Shimmer />
+          )}
+        </div>
+      </InfiniteScroll>
     </main>
   );
 };

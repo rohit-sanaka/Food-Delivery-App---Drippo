@@ -10,7 +10,7 @@ export default function RestaurentCard({ resData }) {
       costForTwo,
       deliveryTime,
       id,
-    } = restaurant.data;
+    } = restaurant.data.data;
 
     return (
       <div key={id} className="restro-card">
