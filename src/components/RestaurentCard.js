@@ -1,4 +1,5 @@
-import { RESTRO_CDN } from "../utils/constants";
+import { RESTRO_IMG_CDN } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 export default function RestaurentCard({ resData }) {
   return (RestaurantCradArray = resData.map((restaurant) => {
@@ -10,23 +11,24 @@ export default function RestaurentCard({ resData }) {
       costForTwo,
       deliveryTime,
       id,
-    } = restaurant.data.data;
-
+    } = restaurant?.data;
     return (
-      <div key={id} className="restro-card">
-        <img
-          className="restro-logo"
-          src={RESTRO_CDN + cloudinaryImageId}
-          alt="Restaurant-img"
-        />
-        <h3>{name}</h3>
-        <p>{cuisines?.join(", ")}</p>
-        <div className="restro-card-details">
-          <span>{"⭐" + avgRating}</span>.
-          <span>₹{costForTwo / 100} FOR TWO</span>.
-          <span>{deliveryTime}Mins</span>
+      <Link key={id} to={`/restaurant/${id}`}>
+        <div className="restro-card">
+          <img
+            className="restro-logo"
+            src={RESTRO_IMG_CDN + cloudinaryImageId}
+            alt="Restaurant-img"
+          />
+          <h3>{name}</h3>
+          <p>{cuisines?.join(", ")}</p>
+          <div className="restro-card-details">
+            <span>{"⭐" + avgRating}</span>.
+            <span>₹{costForTwo / 100} FOR TWO</span>.
+            <span>{deliveryTime}Mins</span>
+          </div>
         </div>
-      </div>
+      </Link>
     );
   }));
 }

@@ -3,7 +3,14 @@
   margin: 0;
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+  color: black;
+}
 
+*{
+  scrollbar-width:0 ;
+}
 .header{
   display: flex;
   justify-content: start;
@@ -31,10 +38,6 @@
   list-style-type: none;
 }
 
-.header-links > li:hover, .header-links > li:focus{
-  cursor: pointer;
-  color:#FA3B32;
-}
 
 .search-sort-filter-section{
   display: flex;

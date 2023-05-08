@@ -5,7 +5,6 @@ import favicon from "../../Images/logo/favicon.png";
 console.log("Inside header");
 export default Header = () => {
   const activeStyles = {
-    fontWeight: "bold",
     color: "#FA3B32",
   };
 
