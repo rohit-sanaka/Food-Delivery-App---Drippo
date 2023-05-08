@@ -23,7 +23,7 @@
   font-style:italic;
   margin-right: auto;
 }
-.header-links{
+.nav-links{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   display: flex;
   font-size: 24px;
@@ -45,12 +45,12 @@
 
 .restro-container{
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(5,1fr);
   gap:1em;
   padding:25px 75px;
 }
 .restro-card > *{
-  padding-top:10px;
+  padding-top:1rem;
 }
 .restro-card{
   background-color:floralwhite;

@@ -1,21 +1,21 @@
 import RestaurentCard from "./RestaurentCard";
 import { RESTRO_CDN_START, RESTRO_CDN2_END } from "../utils/constants";
-import { useEffect, useRef, useState } from "react";
-import Shimmer from "./Shimmer";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useEffect, useState } from "react";
 
 export default Main = () => {
   const [rawData, setRawData] = useState([]);
   const [resData, setResData] = useState([]);
+  const [seachText, setSeachText] = useState("");
+  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [offset, setOffset] = useState(0);
-  const [seachText, setSeachText] = useState("");
 
-  console.log(offset);
+  console.log("inside main");
   useEffect(() => {
     getRestaurants();
-    console.log("useEffect...");
+    return () => {
+      null;
+    };
   }, []);
 
   const getRestaurants = async () => {
@@ -28,16 +28,15 @@ export default Main = () => {
       const data = await response.json();
 
       const cards = data?.data?.cards;
-      const filterDataWithoutId = cards.filter((card) => {
-        return card.data.data.id && card.data.data.cloudinaryImageId;
-      });
+      // const filterDataWithoutId = cards.filter((card) => {
+      //   return card.data.data.id && card.data.data.cloudinaryImageId;
+      // });
       setResData((prevItems) => [...prevItems, ...filterDataWithoutId]);
 
       setRawData((prevItems) => [...prevItems, ...filterDataWithoutId]);
 
-      setOffset((prevOffset) => prevOffset + 16);
-    } catch (error) {
-      setError(error);
+    } catch (err) {
+      setError(err);
     } finally {
       setIsLoading(false);
     }
@@ -91,21 +90,14 @@ export default Main = () => {
           <h2>Top Rated</h2>
         </button>
       </div>
-      <InfiniteScroll
-        dataLength={resData.length / 5}
-        next={getRestaurants}
-        hasMore={offset < 60 ? true : false} // Replace with a condition based on your data source
-        loader={<Shimmer />}
-        endMessage={<p>No more data to load.</p>}
-      >
-        <div className="restro-container">
-          {resData.length > 0 ? (
-            <RestaurentCard resData={resData} />
-          ) : (
-            <Shimmer />
-          )}
-        </div>
-      </InfiniteScroll>
+
+      <div className="restro-container">
+        {resData.length > 0 ? (
+          <RestaurentCard resData={resData} />
+        ) : (
+          isLoading && <h1>Loading</h1>
+        )}
+      </div>
     </main>
   );
 };
