@@ -23,7 +23,6 @@ export default Main = () => {
       const data = await response.json();
 
       const cards = data?.data?.cards[2]?.data?.data?.cards;
-      console.log(cards);
       setResData([...cards]);
 
       setRawData([...cards]);

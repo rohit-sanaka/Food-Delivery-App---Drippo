@@ -1,7 +1,7 @@
 export default Help = () => {
   return (
-    <header className="help">
-      <h1>Here Goes Offers Page</h1>
-    </header>
+    <section className="help">
+      <h1>Here Goes Help Page</h1>
+    </section>
   );
 };

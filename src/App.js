@@ -8,7 +8,8 @@ import AppLayout from "../src/components/AppLayout";
 import Main from "../src/components/Main";
 import Offers from "../src/components/Offers";
 import Help from "../src/components/Help";
-import Profile from "../src/components/Profile";
+// import ProfileFunctional from "../src/components/Profile";
+import ProfileClass from "../src/components/ProfileClass";
 import Cart from "../src/components/Cart";
 import ErrorPage from "../src/components/ErrorPage";
 import RestaurantMenu from "../src/components/RestaurantMenu";
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: <ProfileClass name={"Rohit"} />,
       },
       {
         path: "cart",

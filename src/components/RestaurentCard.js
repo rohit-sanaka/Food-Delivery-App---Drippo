@@ -13,8 +13,8 @@ export default function RestaurentCard({ resData }) {
       id,
     } = restaurant?.data;
     return (
-      <Link key={id} to={`/restaurant/${id}`}>
-        <div className="restro-card">
+      <Link className="restro-card" key={id} to={`/restaurant/${id}`}>
+        <div>
           <img
             className="restro-logo"
             src={RESTRO_IMG_CDN + cloudinaryImageId}

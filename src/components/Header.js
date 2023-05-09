@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import favicon from "../../Images/logo/favicon.png";
 
@@ -10,8 +10,10 @@ export default Header = () => {
 
   return (
     <header className="header">
-      <img src={favicon} className="header-logo" alt="logo" />
-      <h1 className="header-title">ZORRO</h1>
+      <Link to="/" className="header-logo-link">
+        <img src={favicon} className="header-logo" alt="logo" />
+        <h1 className="header-title">ZORRO</h1>
+      </Link>
       <nav className="nav-links">
         <NavLink
           to="."

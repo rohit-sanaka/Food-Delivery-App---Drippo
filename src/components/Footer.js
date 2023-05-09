@@ -1,7 +1,7 @@
 export default Footer = () => {
   return (
-    <header className="footer">
+    <footer className="footer">
       <h1>Here Goes Footer</h1>
-    </header>
+    </footer>
   );
 };
