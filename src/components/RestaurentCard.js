@@ -11,11 +11,12 @@ export default function RestaurentCard({ resData }) {
       costForTwo,
       deliveryTime,
       id,
-    } = restaurant?.data;
+      uuid,
+    } = restaurant?.data?.data;
     return (
       <Link
         className="m-4 mb-0 p-4 hover:shadow-2xl hover:shadow-black/50 hover:outline-1 hover:outline-red-500 hover:outline  "
-        key={id}
+        key={uuid}
         to={`/restaurant/${id}`}
       >
         <div>

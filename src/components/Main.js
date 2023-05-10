@@ -1,6 +1,7 @@
 import RestaurentCard from "./RestaurentCard";
 import { RESTRO_DATA_CDN } from "../utils/constants";
 import { useEffect, useRef, useState } from "react";
+import Shimmer from "./Shimmer";
 
 export default Main = () => {
   const [rawData, setRawData] = useState([]);
@@ -9,31 +10,56 @@ export default Main = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [offset, setOffset] = useState(16);
 
   const ratingAssending = useRef();
   const distanceAssending = useRef();
-  console.log(ratingAssending.current);
+  const root = document.getElementById("root");
 
   useEffect(() => {
     getRestaurants();
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading]);
+
   const getRestaurants = async () => {
+    if (offset > 180) return []; //setting max offset to 180
+    console.log(offset);
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(RESTRO_DATA_CDN);
-      const data = await response.json();
+      const response = await fetch(
+        `https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.409063&lng=78.398308&offset=${offset}&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING`
+      );
+      const JsonData = await response.json();
 
-      const cards = data?.data?.cards[2]?.data?.data?.cards;
-      setResData([...cards]);
+      const cards = JsonData?.data?.cards;
+      console.log(cards);
 
-      setRawData([...cards]);
+      setResData((prevItems) => [...prevItems, ...cards]);
+      setOffset((prevOffset) => prevOffset + 16);
+      setRawData([...prevItems, ...cards]);
     } catch (err) {
       setError(err);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleScroll = () => {
+    console.log("handleScroll");
+    if (
+      Math.floor(window.innerHeight + document.documentElement.scrollTop) !==
+        document.documentElement.offsetHeight - 1 ||
+      isLoading
+    ) {
+      return;
+    }
+    getRestaurants();
   };
 
   return (
@@ -56,7 +82,6 @@ export default Main = () => {
             onClick={() => {
               data1 = rawData.filter((restaurant) => {
                 const name = restaurant?.data?.name.toLowerCase();
-                console.log(name);
                 return name.includes(seachText.toLowerCase());
               });
               setResData(data1);
@@ -70,15 +95,12 @@ export default Main = () => {
           <button
             className="bg-red-100 p-2 rounded-md"
             onClick={() => {
-              console.log(ratingAssending.current);
               const data1 = [...resData];
 
               if (ratingAssending.current) {
-                console.log("desending");
                 ratingAssending.current = false;
                 data1.sort((a, b) => a?.data?.avgRating - b?.data?.avgRating);
               } else {
-                console.log("assending");
                 ratingAssending.current = true;
                 data1.sort((a, b) => b?.data?.avgRating - a?.data?.avgRating);
               }
@@ -90,17 +112,14 @@ export default Main = () => {
           <button
             className="bg-red-100 p-2 rounded-md"
             onClick={() => {
-              console.log(distanceAssending.current);
               const data1 = [...resData];
 
               if (distanceAssending.current) {
-                console.log("desending");
                 distanceAssending.current = false;
                 data1.sort(
                   (a, b) => a?.data?.deliveryTime - b?.data?.deliveryTime
                 );
               } else {
-                console.log("assending");
                 distanceAssending.current = true;
                 data1.sort(
                   (a, b) => b?.data?.deliveryTime - a?.data?.deliveryTime
@@ -130,8 +149,9 @@ export default Main = () => {
         {resData.length > 0 ? (
           <RestaurentCard resData={resData} />
         ) : (
-          isLoading && <h1>Loading</h1>
+          <Shimmer />
         )}
+        {isLoading && resData.length > 0 && <Shimmer />}
       </div>
     </main>
   );
