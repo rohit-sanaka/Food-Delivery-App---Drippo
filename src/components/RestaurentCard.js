@@ -13,16 +13,20 @@ export default function RestaurentCard({ resData }) {
       id,
     } = restaurant?.data;
     return (
-      <Link className="restro-card" key={id} to={`/restaurant/${id}`}>
+      <Link
+        className="m-4 mb-0 p-4 hover:shadow-2xl hover:shadow-black/50 hover:outline-1 hover:outline-red-500 hover:outline  "
+        key={id}
+        to={`/restaurant/${id}`}
+      >
         <div>
           <img
-            className="restro-logo"
+            className=""
             src={RESTRO_IMG_CDN + cloudinaryImageId}
             alt="Restaurant-img"
           />
-          <h3>{name}</h3>
-          <p>{cuisines?.join(", ")}</p>
-          <div className="restro-card-details">
+          <h3 className="font-bold text-xl mt-2 break-words">{name}</h3>
+          <p className=" mt-2">{cuisines?.join(", ")}</p>
+          <div className="mt-2 flex justify-between">
             <span>{"⭐" + avgRating}</span>.
             <span>₹{costForTwo / 100} FOR TWO</span>.
             <span>{deliveryTime}Mins</span>
