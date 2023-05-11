@@ -8,7 +8,7 @@ import Footer from "./Footer";
 console.log("inside applayout");
 export default function AppLayout() {
   return (
-    <div className="p-1">
+    <div className="">
       <Header />
       <Outlet />
       <Footer />
