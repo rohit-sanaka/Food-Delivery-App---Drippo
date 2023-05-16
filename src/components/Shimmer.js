@@ -1,6 +1,6 @@
 export default Shimmer = () => {
   // create an array with empty elements of 16 size
-  return Array(10)
+  return Array(8)
     .fill("")
     .map((ele, index) => {
       return (

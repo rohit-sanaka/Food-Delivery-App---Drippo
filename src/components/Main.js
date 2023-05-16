@@ -2,52 +2,110 @@ import RestaurentCard from "./RestaurentCard";
 import backToTop from "../../Images/back-to-top.png";
 import { useEffect, useRef, useState } from "react";
 import Shimmer from "./Shimmer";
-
+import useOnline from "../utils/useOnline";
 export default Main = () => {
   const [rawData, setRawData] = useState([]);
   const [resData, setResData] = useState([]);
-  const [seachText, setSeachText] = useState("");
+  const [searchText, setSeachText] = useState("");
   const [scrollTopVisibility, setScrollTopVisibility] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [offset, setOffset] = useState(15);
 
-  const ratingAssending = useRef();
-  const distanceAssending = useRef();
-  const activeSort = useRef(0);
-  const totalNoOfRestaurants = useRef(0);
+  const isOnline = useOnline();
+  // -----------------------------------------------------------
+  const offsetRef = useRef(15);
+  const totalNoOfRestaurantsRef = useRef(0);
 
-  useEffect(() => {
-    getRestaurants();
-  }, []);
+  const activeSortRef = useRef(0);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("scroll", handleScrollTopVisibility);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLoading]);
+  const ratingAssendingRef = useRef(true);
+  const distanceAssendingRef = useRef(true);
+  const isOnlineRef = useRef(false);
+  // ------------------------------------------------------------
+  const handleScroll = () => {
+    //To handle the scrolltop button visibility.
+    window.scrollY > 500
+      ? setScrollTopVisibility(true)
+      : setScrollTopVisibility(false);
+
+    //To call the api when scrolled to the borrom of the page.
+    if (
+      window.innerHeight + document.documentElement.scrollTop <=
+        document.documentElement.offsetHeight - 100 ||
+      isLoading ||
+      offsetRef.current >= totalNoOfRestaurantsRef.current
+    ) {
+      return;
+    } else {
+      getRestaurants();
+    }
+  };
+
+  const handleSort = (currentSort, sortBy, isAssending) => {
+    activeSortRef.current = currentSort;
+    const data = [...resData];
+
+    if (isAssending.current) {
+      isAssending.current = false;
+      data.sort((a, b) => a?.data?.data[sortBy] - b?.data?.data[sortBy]);
+    } else {
+      isAssending.current = true;
+      data.sort((a, b) => b?.data?.data[sortBy] - a?.data?.data[sortBy]);
+    }
+    return data;
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const filteredData = handleFilter(rawData);
+    setResData([...filteredData]);
+  };
+
+  const handleFilter = (data) => {
+    if (!searchText) {
+      return data;
+    }
+    return data.filter((restro) => {
+      const name = restro?.data?.data?.name.toLowerCase();
+      const searchtext = searchText.toLowerCase();
+      return name.includes(searchtext);
+    });
+  };
+
+  const getUniqueRestaurants = (data) => {
+    var map = new Map();
+    return data.filter((restro) => {
+      if (map.get(restro?.data?.data?.id)) {
+        return false;
+      }
+      map.set(restro?.data?.data?.id, restro);
+      return true;
+    });
+  };
 
   const getRestaurants = async () => {
-    console.log(offset);
-    if (offset >= totalNoOfRestaurants) return []; //setting max offset to 180
-
     setIsLoading(true);
     setError(null);
-
     try {
       const response = await fetch(
-        `https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.409063&lng=78.398308&offset=${offset}&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING`
+        `https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.409063&lng=78.398308&offset=${offsetRef.current}&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING`
       );
+
       const JsonData = await response.json();
 
-      totalNoOfRestaurants.current = JsonData?.data?.totalSize;
+      //getting the total number of restaurants
+      //to limit the offset to the number of restaurant
+      totalNoOfRestaurantsRef.current = JsonData?.data?.totalSize;
 
-      const cards = JsonData?.data?.cards;
+      const cards = [...resData, ...JsonData?.data?.cards];
 
-      setResData((prevItems) => [...prevItems, ...cards]);
-      setRawData((prevItems) => [...prevItems, ...cards]);
-      setOffset((prevOffset) => prevOffset + 16);
+      const uniqueRestaurants = getUniqueRestaurants(cards);
+      const filteredRestaurants = handleFilter(uniqueRestaurants);
+
+      setRawData([...uniqueRestaurants]);
+      setResData([...filteredRestaurants]);
+      offsetRef.current = offsetRef.current + 16;
     } catch (err) {
       setError(err);
     } finally {
@@ -55,69 +113,75 @@ export default Main = () => {
     }
   };
 
-  const handleScrollTopVisibility = () => {
-    window.scrollY > 500
-      ? setScrollTopVisibility(true)
-      : setScrollTopVisibility(false);
-  };
-
-  const handleScroll = () => {
-    // console.log("handleScroll");
-    // console.log(window.innerHeight);
-    // console.log(document.documentElement.scrollTop);
-    console.log(window.innerHeight + document.documentElement.scrollTop);
-    console.log(document.documentElement.offsetHeight);
-
-    if (
-      !(
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 1
-      ) ||
-      isLoading
-    ) {
-      return;
-    }
+  useEffect(() => {
     getRestaurants();
-  };
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isLoading]);
+
+  if (!isOnline) {
+    return (
+      <div className="text-center">
+        It seems you are OFFLINE!!! please check your internet connection!!!
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center">{`${error.code} : ${error.message}`}</div>
+    );
+  }
+
+  if (!resData) {
+    return (
+      <div className="text-center">
+        <h1>No data found</h1>
+      </div>
+    );
+  }
 
   return (
     <main className="px-48 ">
-      <div className="my-2 px-8 py-5 flex justify-between border-b-2 border-b-violet-50">
-        <div className="align-center inline-flex align-middle">
-          <input
-            className="h-10 w-52 rounded-md text-2xl outline-1 outline-slate-600 outline"
-            value={seachText}
-            onChange={(event) => {
-              setSeachText(event.target.value);
-            }}
-            type="text"
-            name="searchbox"
-            id="searchbox"
-          />
+      <div className="shadow-md my-2 pb-3 px-8 py-5 flex justify-between border-b-2 border-b-violet-50 sticky top-20 bg-slate-100">
+        <form onSubmit={handleSearch}>
+          <div className="align-center inline-flex align-middle">
+            <input
+              className="h-10 w-52 rounded-md text-2xl outline-1 outline-slate-600 outline"
+              value={searchText}
+              onChange={(event) => {
+                setSeachText(event.target.value);
+              }}
+              type="text"
+              name="searchbox"
+              id="searchbox"
+            />
 
-          <button
-            className="bg-red-100 p-2 rounded-md ml-3"
-            onClick={() => {
-              data1 = rawData.filter((restaurant) => {
-                const name = restaurant?.data?.data?.name.toLowerCase();
-                return name.includes(seachText.toLowerCase());
-              });
-              setResData(data1);
-            }}
-          >
-            Search
-          </button>
-        </div>
+            <button
+              className="bg-red-100 p-2 rounded-md ml-3"
+              type="submit"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </div>
+        </form>
 
         <div className="flex gap-10">
           <button
             className={
-              activeSort.current === 0
+              activeSortRef.current === 0
                 ? "border-b-4 border-solid border-red-500 box-border "
                 : "border-b-4 border-transparent"
             }
             onClick={() => {
-              activeSort.current = 0;
+              activeSortRef.current = 0;
               setResData([...rawData]);
             }}
           >
@@ -126,80 +190,70 @@ export default Main = () => {
 
           <button
             className={
-              activeSort.current === 1
+              activeSortRef.current === 1
                 ? "border-b-4 border-solid border-red-500 box-border "
                 : "border-b-4 border-transparent"
             }
             onClick={() => {
-              activeSort.current = 1;
-              const data1 = [...resData];
-              if (ratingAssending.current) {
-                ratingAssending.current = false;
-                data1.sort(
-                  (a, b) => a?.data?.data?.avgRating - b?.data?.data?.avgRating
-                );
-              } else {
-                ratingAssending.current = true;
-                data1.sort(
-                  (a, b) => b?.data?.data?.avgRating - a?.data?.data?.avgRating
-                );
-              }
-              setResData(data1);
+              const sorteddata = handleSort(1, "avgRating", ratingAssendingRef);
+              setResData([...sorteddata]);
             }}
           >
-            {`Rating ${ratingAssending.current ? `⬆️` : `⬇️`}`}
+            {`Rating ${ratingAssendingRef.current ? `⬆️` : `⬇️`}`}
           </button>
 
           <button
             className={
-              activeSort.current === 2
+              activeSortRef.current === 2
                 ? "border-b-4 border-solid border-red-500 box-border "
                 : "border-b-4 border-transparent"
             }
             onClick={() => {
-              activeSort.current = 2;
-              const data1 = [...resData];
-
-              if (distanceAssending.current) {
-                distanceAssending.current = false;
-                data1.sort(
-                  (a, b) =>
-                    a?.data?.data?.deliveryTime - b?.data?.data?.deliveryTime
-                );
-              } else {
-                distanceAssending.current = true;
-                data1.sort(
-                  (a, b) =>
-                    b?.data?.data?.deliveryTime - a?.data?.data?.deliveryTime
-                );
-              }
-              setResData(data1);
+              const sorteddata = handleSort(
+                2,
+                "deliveryTime",
+                distanceAssendingRef
+              );
+              setResData([...sorteddata]);
             }}
           >
-            {`Delivery Time ${distanceAssending.current ? `⬆️` : `⬇️`}`}
+            {`Delivery Time ${distanceAssendingRef.current ? `⬆️` : `⬇️`}`}
           </button>
         </div>
       </div>
 
+      <div className="text-center w-full">
+        {rawData.length > 0 &&
+          Array.isArray(resData) &&
+          resData.length === 0 && (
+            <h1 className="text-center">No Restaurants found!!!</h1>
+          )}
+      </div>
+
       <div className="grid grid-cols-4 gap-2">
-        {resData.length > 0 ? (
-          <RestaurentCard resData={resData} />
+        {Array.isArray(resData) && resData.length > 0 ? (
+          resData.map((card) => {
+            return <RestaurentCard key={card?.data.id} cardData={card} />;
+          })
         ) : (
           <Shimmer />
         )}
-        {isLoading && resData.length > 0 && <Shimmer />}
+
+        {isLoading && offsetRef.current <= totalNoOfRestaurantsRef.current && (
+          <Shimmer />
+        )}
       </div>
 
-      {scrollTopVisibility ? (
-        <button
-          className="w-20 fixed bottom-12 right-12"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
+      <button
+        className="w-20 fixed bottom-12 right-12"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        {scrollTopVisibility ? (
           <img src={backToTop} alt="back-to-top" />
-        </button>
-      ) : (
-        <>""</>
-      )}
+        ) : (
+          <></>
+        )}
+      </button>
     </main>
   );
 };
