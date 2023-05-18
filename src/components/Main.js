@@ -34,7 +34,7 @@ export default Main = () => {
 
     if (
       window.innerHeight + document.documentElement.scrollTop <=
-        document.documentElement.offsetHeight - 150 ||
+        document.documentElement.offsetHeight - 500 ||
       isLoading ||
       offsetRef.current >= totalNoOfRestaurantsRef.current
     ) {
@@ -61,8 +61,18 @@ export default Main = () => {
   //   });
   // };
 
+  const getUniqueRestaurants = (data) => {
+    var map = new Map();
+    return data.filter((restro) => {
+      if (map.get(restro.data.id)) {
+        return false;
+      }
+      map.set(restro.data.id, restro);
+      return true;
+    });
+  };
+
   const getNextRestaurants = async () => {
-    console.log("getNextRestaurants");
     setIsLoading(true);
     setError(null);
     try {
@@ -77,7 +87,9 @@ export default Main = () => {
       const JsonData = await response.json();
       cards = JsonData.data.cards.map((card) => card.data);
 
-      setResData([...resData, ...cards]);
+      const uniqueRestaurants = getUniqueRestaurants([...resData, ...cards]);
+
+      setResData([...uniqueRestaurants]);
 
       offsetRef.current = offsetRef.current + 16;
     } catch (err) {
@@ -103,7 +115,6 @@ export default Main = () => {
         activeSortRef.current == 0
           ? [...JsonData?.data?.cards[2]?.data?.data?.cards]
           : [...JsonData?.data?.cards[0]?.data?.data?.cards];
-      console.log(cards);
 
       setResData([...cards]);
 

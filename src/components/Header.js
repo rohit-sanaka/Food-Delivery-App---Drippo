@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 export default Header = () => {
   const cartItems = useSelector((store) => store.cart.items);
   return (
-    <header className="flex justify-between items-center shadow-md pl-44 pr-52 h-20 sticky top-0 bg-white">
+    <header className="flex justify-between items-center shadow-md pl-44 pr-52 h-20 sticky top-0 bg-white z-10">
       <Link to="/" className="inline-flex items-center h-full">
         <img src={favicon} className="h-full" alt="logo" />
         <h1 className="inline h-auto text-red-500 font-bold italic text-4xl">

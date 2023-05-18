@@ -7,6 +7,9 @@ export const RESTRO_DATA_DELIVERY_TIME_AND_OFFSET =
 export const RESTRO_MENU_CDN =
   "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=17.409063&lng=78.398308&restaurantId=52630";
 
+export const FODD_ITEM_IMG_URL =
+  "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_208,h_208,c_fit/";
+
 export const SORT_TYPE = {
   0: "RELEVENCE",
   1: "RATING",
