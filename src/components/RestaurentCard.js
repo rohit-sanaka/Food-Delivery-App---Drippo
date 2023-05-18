@@ -10,7 +10,8 @@ export default function RestaurentCard({ cardData }) {
     costForTwo,
     deliveryTime,
     id,
-  } = cardData?.data?.data;
+  } = cardData?.data;
+
   return (
     <Link
       className="m-4 mb-0 p-4 hover:shadow-2xl hover:shadow-black/50 hover:outline-1 hover:outline-red-500 hover:outline  "
