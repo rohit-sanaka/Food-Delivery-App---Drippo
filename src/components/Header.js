@@ -1,13 +1,10 @@
 import { NavLink, Link } from "react-router-dom";
 
 import favicon from "../../Images/logo/favicon.png";
+import { useSelector } from "react-redux";
 
-// console.log("Inside header");
 export default Header = () => {
-  //   const activeStyles = {
-  //     color: "#FA3B32",
-  //   };
-
+  const cartItems = useSelector((store) => store.cart.items);
   return (
     <header className="flex justify-between items-center shadow-md pl-44 pr-52 h-20 sticky top-0 bg-white">
       <Link to="/" className="inline-flex items-center h-full">
@@ -63,10 +60,14 @@ export default Header = () => {
         </NavLink>
 
         <NavLink
+          noofitems={cartItems.length}
           className={({ isActive }) => {
-            return isActive
-              ? "text-red-500"
-              : "hover:text-red-300 focus:outline-red-500";
+            return `relative before:content-[attr(noofitems)] before:text-center before:text-white before:absolute before:w-8  before:h-8 before:-right-5 before:-top-5 before:rounded-full before:bg-red-500
+              ${
+                isActive
+                  ? "text-red-500"
+                  : "hover:text-red-300 focus:outline-red-500"
+              } `;
           }}
           to="cart"
         >
