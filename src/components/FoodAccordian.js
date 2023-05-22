@@ -1,13 +1,15 @@
 import { useState } from "react";
 import FoodCard from "./FoodCard";
+import { ToastContainer, Slide } from "react-toastify";
 
 const FoodAccordian = ({ item }) => {
   const [isActive, setIsActive] = useState(true);
   return (
     <div className="accordion">
+      <ToastContainer transition={Slide} />
       <div className="accordion-item">
         <div
-          className={`flex justify-between align-middle cursor-pointer bg-emerald-400 py-3 px-5 text-xl font-bold`}
+          className={`flex cursor-pointer justify-between bg-emerald-400 px-5 py-3 align-middle text-xl font-bold`}
           onClick={() => setIsActive(!isActive)}
         >
           <div className="">{item?.title}</div>
