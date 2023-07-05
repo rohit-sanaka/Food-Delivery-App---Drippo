@@ -1,8 +1,8 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import RestaurantInfo from "./ResInfo";
-import MenuItems from "./MenuItems";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import RestaurantInfo from './ResInfo';
+import MenuItems from './MenuItems';
 
 const RestaurantMenu = () => {
   const [resInfo, setResInfo] = useState({});

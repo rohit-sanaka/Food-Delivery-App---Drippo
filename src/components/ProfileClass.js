@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -9,22 +9,22 @@ class Profile extends React.Component {
   componentDidMount() {
     //This one will be called only one during the initial render.
     //Ideal place to call api
-    console.log("componentDidMount");
+    console.log('componentDidMount');
   }
 
   componentDidUpdate(prevProps, prevState) {
     //This on will be called everytime the state or props changes.
-    console.log("componentDidUpdate");
+    console.log('componentDidUpdate');
   }
 
   componentWillUnmount() {
     //This will be called the DOM leave page/component.
     //Typically used for cleaning.
-    console.log("componentWillUnmount");
+    console.log('componentWillUnmount');
   }
   render() {
     return (
-      <div className="profile">
+      <div className='profile'>
         <h1>
           This is inside Class Based Profile Component...! {this.props.name}
         </h1>

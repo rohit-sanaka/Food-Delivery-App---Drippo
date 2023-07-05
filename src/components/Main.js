@@ -1,15 +1,15 @@
-import RestaurentCard from "./RestaurentCard";
-import backToTop from "../../Images/back-to-top.png";
-import { SORT_TYPE } from "../utils/constants";
-import { useEffect, useRef, useState } from "react";
-import Shimmer from "./Shimmer";
-import useOnline from "../utils/useOnline";
+import RestaurentCard from './RestaurentCard';
+import backToTop from '../../Images/back-to-top.png';
+import { SORT_TYPE } from '../utils/constants';
+import { useEffect, useRef, useState } from 'react';
+import Shimmer from './Shimmer';
+import useOnline from '../utils/useOnline';
 
 //-------------------------------------------
 
 export default Main = () => {
   const [resData, setResData] = useState([]);
-  const [searchText, setSeachText] = useState("");
+  const [searchText, setSeachText] = useState('');
   const [scrollTopVisibility, setScrollTopVisibility] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -132,16 +132,16 @@ export default Main = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [isLoading]);
 
   if (!isOnline) {
     return (
-      <div className="text-center">
+      <div className='text-center'>
         It seems you are OFFLINE!!! please check your internet connection!!!
       </div>
     );
@@ -149,21 +149,21 @@ export default Main = () => {
 
   if (error) {
     return (
-      <div className="text-center">{`${error.code} : ${error.message}`}</div>
+      <div className='text-center'>{`${error.code} : ${error.message}`}</div>
     );
   }
 
   if (!resData) {
     return (
-      <div className="text-center">
+      <div className='text-center'>
         <h1>No data found</h1>
       </div>
     );
   }
 
   return (
-    <main className="px-40 ">
-      <div className="sticky top-20  my-2 flex justify-between border-b-2 border-b-violet-50 bg-slate-100 px-10 pt-3 shadow-md">
+    <main className='px-40 '>
+      <div className='sticky top-20  my-2 flex justify-between border-b-2 border-b-violet-50 bg-slate-100 px-10 pt-3 shadow-md'>
         {/* <form onSubmit={handleSearch}>
           <div className="align-center inline-flex align-middle">
             <input
@@ -188,23 +188,23 @@ export default Main = () => {
         </form> */}
 
         <div>
-          <h2 className="pb-3 text-3xl font-bold">
+          <h2 className='pb-3 text-3xl font-bold'>
             {resData.length > 0
-              ? totalNoOfRestaurantsRef.current + " Restaurants"
-              : "Finding Restaurants... "}
+              ? totalNoOfRestaurantsRef.current + ' Restaurants'
+              : 'Finding Restaurants... '}
           </h2>
         </div>
 
-        <div className="flex gap-10">
+        <div className='flex gap-10'>
           <button
             className={
               activeSortRef.current === 0
-                ? "box-border border-b-4 border-solid border-red-500 text-xl"
-                : "border-b-4 border-transparent text-xl text-gray-600"
+                ? 'box-border border-b-4 border-solid border-red-500 text-xl'
+                : 'border-b-4 border-transparent text-xl text-gray-600'
             }
             onClick={() => {
               activeSortRef.current = 0;
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               setResData([]);
               offsetRef.current = 15;
               getRestaurants();
@@ -216,12 +216,12 @@ export default Main = () => {
           <button
             className={
               activeSortRef.current === 1
-                ? "box-border border-b-4 border-solid border-red-500 text-xl"
-                : "border-b-4 border-transparent text-xl text-gray-600"
+                ? 'box-border border-b-4 border-solid border-red-500 text-xl'
+                : 'border-b-4 border-transparent text-xl text-gray-600'
             }
             onClick={() => {
               activeSortRef.current = 1;
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               setResData([]);
               offsetRef.current = 15;
               getRestaurants();
@@ -233,12 +233,12 @@ export default Main = () => {
           <button
             className={
               activeSortRef.current === 2
-                ? "box-border border-b-4 border-solid border-red-500 text-xl"
-                : "border-b-4 border-transparent text-xl text-gray-600"
+                ? 'box-border border-b-4 border-solid border-red-500 text-xl'
+                : 'border-b-4 border-transparent text-xl text-gray-600'
             }
             onClick={() => {
               activeSortRef.current = 2;
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               setResData([]);
               offsetRef.current = 15;
               getRestaurants();
@@ -250,12 +250,12 @@ export default Main = () => {
           <button
             className={
               activeSortRef.current === 3
-                ? "box-border border-b-4 border-solid border-red-500 text-xl"
-                : "border-b-4 border-transparent text-xl text-gray-600"
+                ? 'box-border border-b-4 border-solid border-red-500 text-xl'
+                : 'border-b-4 border-transparent text-xl text-gray-600'
             }
             onClick={() => {
               activeSortRef.current = 3;
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               setResData([]);
               offsetRef.current = 15;
               getRestaurants();
@@ -266,12 +266,12 @@ export default Main = () => {
           <button
             className={
               activeSortRef.current === 4
-                ? "box-border border-b-4 border-solid border-red-500 text-xl"
-                : "border-b-4 border-transparent text-xl text-gray-600"
+                ? 'box-border border-b-4 border-solid border-red-500 text-xl'
+                : 'border-b-4 border-transparent text-xl text-gray-600'
             }
             onClick={() => {
               activeSortRef.current = 4;
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               setResData([]);
               offsetRef.current = 15;
               getRestaurants();
@@ -282,7 +282,7 @@ export default Main = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className='grid grid-cols-4 gap-4'>
         {Array.isArray(resData) && resData.length > 0 ? (
           resData.map((card) => {
             return <RestaurentCard key={card.data.id} cardData={card} />;
@@ -297,11 +297,11 @@ export default Main = () => {
       </div>
 
       <button
-        className="fixed bottom-12 right-12 w-20"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className='fixed bottom-12 right-12 w-20'
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         {scrollTopVisibility ? (
-          <img src={backToTop} alt="back-to-top" />
+          <img src={backToTop} alt='back-to-top' />
         ) : (
           <></>
         )}
