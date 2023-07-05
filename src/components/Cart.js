@@ -37,9 +37,8 @@ export default Cart = () => {
             <div key={item.name} className="flex align-middle w-full px-5 py-2">
               <p className="w-9/12">{`${item.name}    x     ${item.quantity}`}</p>
               <p className="w-1/12 text-center"> {`=`} </p>
-              <p className="w-2/12 text-right">{`₹${
-                (item.price / 100) * item.quantity
-              }`}</p>
+              <p className="w-2/12 text-right">{`₹${(item.price / 100) * item.quantity
+                }`}</p>
             </div>
           );
         })}
